@@ -24,3 +24,13 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@keyframes blink {
+  0%, 80% { opacity: 1; }  /* Hold visibility for 70% of the time */
+  90% { opacity: 0; }      /* Quick fade-out */
+  100% { opacity: 1; }     /* Reset */
+}
+
+.animate-blink {
+  animation: blink 2s ease-in-out infinite; /* Total cycle = 2s */
+}

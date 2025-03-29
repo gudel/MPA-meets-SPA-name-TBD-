@@ -1,0 +1,56 @@
+/* Base navbar styles */
+.navbar {
+    background-color: rgba(255, 5, 5, 0); /* Slightly transparent */
+    position: fixed;
+    top: 3rem;
+    left: 0;
+    height: auto;
+    width: 100%;
+    box-shadow: 0 0 12px rgba(0, 123, 0, 0.2);
+    padding: 0 0;
+    margin: 0 0;
+    display: flex;
+    z-index: 2;
+    justify-content: center;
+}
+
+/* List container */
+.navList {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    padding: 0;
+    margin: 0;
+    z-index: 1;
+}
+
+/* Default link styles */
+.navlink {
+    color: #ccc;
+    text-decoration: none;
+    padding: 0.2rem 1rem;
+    border-radius: 18px;
+    transition: all 0.3s ease-in-out;
+    border: 0.2px solid rgba(255, 255, 255, 0.5); /* Clear border */
+    background: rgba(255, 255, 255, 0.05); /* Light background for visibility */
+    z-index: 1;
+}
+
+/* Active page styles (glow effect) */
+.active {
+    color: green;
+    background: rgba(8, 233, 8, 0.2);
+    box-shadow: 0 0 15px rgba(4, 238, 4, 0.9);
+    animation: glow 1.5s infinite alternate;
+    border-color: rgba(8, 233, 8, 0.8); /* Stronger border for active item */
+}
+
+/* Glow animation */
+@keyframes glow {
+    from {
+        box-shadow: 0 0 5px rgba(0, 123, 0, 0.5);
+    }
+    to {
+        box-shadow: 0 0 20px rgba(0, 123, 0, 1);
+    }
+}
