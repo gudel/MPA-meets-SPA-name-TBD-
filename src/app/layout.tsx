@@ -31,24 +31,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {/* Navbar (fixed at the top) */}
-        <header className="fixed top-0 left-0 w-full h-8 mt-11 bg-gradient-to-r from-blue-500/80 to-purple-500/40 shadow-md pl-3 z-10">
+        <header className="fixed top-0 left-0 w-full h-8 mt-11 bg-gradient-to-r from-zinc-800/20 to-black-500/80 overflow-hidden drop-shadow-[0_0_2px_1px_rgba(0,255,125,0.8)] pl-3 z-10 ">
           <Navbar />
         </header>
-
-        {/* Top-left Image (relative to header) */}
-        <div className="absolute top-4 -left-[-12px] w-auto h-auto flex items-center justify-center z-20">
-          <div className="animate-spin [animation-duration:13s] ease-linear relative overflow-visible w-20 h-40 sm:w-22 sm:h-22 drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] bg-gray-200/40 rounded-full flex items-center justify-center hover:invert">
-            <Image
-              src="radioactive.svg"
-              alt="icon"
-              fill
-              className="animate-pulse"
-            />
-          </div>
-        </div>
         {children}
         <footer className="fixed bottom-0 left-0 w-full h-16 bg-transparent flex justify-center items-center">
-          <p className="relative min-w-[200px] text-center">Copyright 2025<RotatingText /></p>
+          <p className="relative min-w-[200px] text-center">CC-BY-NC-SA 2025<RotatingText /></p>
         </footer>
       </body>
     </html>
