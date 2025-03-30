@@ -5,6 +5,8 @@ import Image from "next/image";
 import Navbar from "@/components/navBarHorizon/navBar";
 import RotatingText from "@/components/rotatingFooter/rotatingFooter";
 
+
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -31,11 +33,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {/* Navbar (fixed at the top) */}
-        <header className="fixed top-0 left-0 w-full h-8 mt-11 bg-gradient-to-r from-zinc-800/20 to-black-500/80 overflow-hidden drop-shadow-[0_0_2px_1px_rgba(0,255,125,0.8)] pl-3 z-10 ">
+        <div className="fixed top-0 left-0 w-full h-30 bg-black/95 bg-blend- z-50">
+        <header className="sticky top-0 left-0 w-full h-8 mt-11 bg-gradient-to-r from-zinc-800/20 to-black/90 overflow-hidden shadow-[0_0_4px_1px_rgba(0,255,125,0.2)] pl-3 z-10 ">
           <Navbar />
         </header>
+        </div>
         {children}
-        <footer className="fixed bottom-0 left-0 w-full h-16 bg-transparent flex justify-center items-center">
+       
+        <footer className="fixed bg-blend bottom-0 left-0 w-full h-16 bg-black/90 flex justify-center items-center z-50">
           <p className="relative min-w-[200px] text-center">CC-BY-NC-SA 2025<RotatingText /></p>
         </footer>
       </body>

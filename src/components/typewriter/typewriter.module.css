@@ -1,0 +1,10 @@
+.typewriter {
+  display: flex;
+  justify-content: center;
+}
+
+.typewriter p {
+  margin-inline: auto;
+  overflow: hidden;
+  
+}
