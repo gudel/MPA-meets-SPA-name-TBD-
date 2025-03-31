@@ -15,7 +15,8 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground: #03f56898;
+    text-shadow: 0 0 1px var(--foreground), 0 0 3px var(--foreground), 0 0 5px var(--foreground);
   }
 }
 
@@ -34,3 +35,4 @@ body {
 .animate-blink {
   animation: blink 2s ease-in-out infinite; /* Total cycle = 2s */
 }
+

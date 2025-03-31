@@ -1,0 +1,68 @@
+/* Main wrapper to contain the overlay without shifting layout */
+.imageOverlay {
+    position: relative;
+    display: block;
+    width: 100%;
+    min-height: 100%; /* Ensure it adapts to content height */
+    overflow: hidden; /* Ensures no layout shifting */
+    z-index: 4;
+  }
+  
+  /* Green Hue & Scanline Overlay */
+  .imageOverlay::before {
+    content: "";
+    position: absolute;
+    inset: 0; /* Shorthand for top, left, right, bottom */
+    width: 100%;
+    min-height: inherit; /* Makes sure it scales with the container */
+    
+    /* Green tint overlay */
+    background: 
+      linear-gradient(
+        rgba(0, 255, 0, 0.15) 30%, 
+        rgba(0, 0, 0, 0.85) 20%
+      ); /* Simulated CRT tint */
+    
+    background-size: 100% 1px; /* Controls scanline thickness */
+    pointer-events: none; /* Ensures interactions pass through */
+    z-index: 12; /* Ensures it's above content but below the scanline */
+    opacity: 0.8;
+    mix-blend-mode: overlay; /* Ensures a strong green hue */
+  }
+  
+  /* Moving Scanline Effect */
+  .imageOverlay::after {
+    content: "";
+    position: absolute;
+    inset: 0; /* Covers the entire image */
+    min-height: inherit; /* Ensures it covers the full content */
+    width: 100%;
+    height: auto; /* Allows the scanline to adapt */
+  
+    /* Moving scanline gradient */
+    background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(255, 255, 255, 0.4) 10%, /* White streak for CRT effect */
+      rgba(0, 0, 0, 0.1) 100%
+    );
+  
+    mix-blend-mode: overlay; /* Ensures proper layering effect */
+    opacity: 0.3; /* Adjust for visibility */
+    pointer-events: none;
+    z-index: 20; /* Ensures it's above content */
+  
+    /* NEW: Slight blur effect for text distortion */
+    backdrop-filter: blur(2px); /* Blurs content behind scanline */
+    filter: blur(0.8px); /* Slight blur on the scanline itself */
+  
+    animation: scanline 5s linear infinite;
+  }
+  
+  /* Animation for Scanline */
+  @keyframes scanline {
+    0% { top: 0%; }
+    80% { top: 100%; }
+    100% { top: 100%; }
+  }
+  

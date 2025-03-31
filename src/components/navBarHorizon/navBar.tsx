@@ -36,7 +36,7 @@ export default function Navbar() {
                     src="radioactive.svg"
                     alt="icon"
                     fill
-                    className="animate-pulse"
+                    className="animate-pulse" //animate pulse infinitely
                     />
                 </div>
             </div>
@@ -50,7 +50,7 @@ export default function Navbar() {
                     src="radioactive.svg"
                     alt="icon"
                     fill
-                    className="animate-pulse"
+                    className="animate-pulse" //animate pulse infinitely
                     />
                 </div>
             </div>

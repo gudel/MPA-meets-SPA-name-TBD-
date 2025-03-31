@@ -1,6 +1,7 @@
 "use client"; // Ensures it's a client component
 
 import { useState, useEffect } from "react";
+import styles from "./rotatingFooter.module.css"
 
 export default function RotatingText() {
     const texts = ["Sarapz", "gudel", "Endjuro"];

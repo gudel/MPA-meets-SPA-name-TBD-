@@ -4,6 +4,7 @@ import "./globals.css";
 import Image from "next/image";
 import Navbar from "@/components/navBarHorizon/navBar";
 import RotatingText from "@/components/rotatingFooter/rotatingFooter";
+import ScanlineOverlay from '@/components/scanlineOverlay/scanlineOverlay';  // Import the ScanlineOverlay component
 
 
 
@@ -38,8 +39,10 @@ export default function RootLayout({
           <Navbar />
         </header>
         </div>
-        {children}
-       
+        {/* Wrapping children with ScanlineOverlay */}
+        <ScanlineOverlay>
+          {children}  {/* Pass content to ScanlineOverlay */}
+        </ScanlineOverlay>
         <footer className="fixed bg-blend bottom-0 left-0 w-full h-16 bg-black/90 flex justify-center items-center z-50">
           <p className="relative min-w-[200px] text-center">CC-BY-NC-SA 2025<RotatingText /></p>
         </footer>
