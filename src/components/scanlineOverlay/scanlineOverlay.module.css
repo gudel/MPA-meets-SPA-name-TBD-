@@ -1,68 +1,141 @@
-/* Main wrapper to contain the overlay without shifting layout */
+/* ==========================================
+   Main wrapper to contain the overlay  
+   Ensures no layout shifting while applying effects  
+   ========================================== */
 .imageOverlay {
-    position: relative;
-    display: block;
-    width: 100%;
-    min-height: 100%; /* Ensure it adapts to content height */
-    overflow: hidden; /* Ensures no layout shifting */
-    z-index: 4;
-  }
+  position: relative; /* Allows absolute positioning of child elements */
+  display: inline-block; /* Ensures the wrapper adapts to content */
+  width: 100%; /* Full width */
+  height: fit-content; /* Adjusts height based on content */
+  overflow: hidden; /* Prevents unintended scrolling due to animations */
+  z-index: 8; /* Ensures it sits above other elements */
+  background-color: rgba(54, 221, 32, 0.041); /* Subtle green background tint */
+}
+
+/* ==========================================
+   Green Hue & Scanline Overlay  
+   Adds a greenish tint and scanline effect over the image  
+   ========================================== */
+.imageOverlay::before {
+  content: ""; /* Required for pseudo-elements */
+  position: absolute; /* Covers entire wrapper */
+  inset: 0; /* Shorthand: sets top, right, bottom, left to 0 */
   
-  /* Green Hue & Scanline Overlay */
+  /* Green tint overlay */
+  background: 
+    linear-gradient(
+      rgba(0, 255, 0, 0.15) 30%, /* Green hue at top */
+      rgba(0, 0, 0, 0.85) 20% /* Dark fade at bottom for contrast */
+    ); /* Simulated CRT tint */
+  
+  background-size: 100% 4px; /* Default scanline thickness */
+  pointer-events: none; /* Allows interactions to pass through */
+  z-index: 14; /* 12: Places it above content but below scanline animation 14: place it above content and animation */
+  opacity: 0.5; /* Controls transparency of overlay */
+  mix-blend-mode: overlay; /* Blends with underlying content */
+}
+
+/* ==========================================
+   Moving Scanline Effect  
+   Simulates the movement of an old CRT monitor scanline  
+   ========================================== */
+.imageOverlay::after {
+  content: ""; /* Required for pseudo-elements */
+  position: absolute; /* Covers the entire image */
+  inset: 0; /* Ensures full coverage */
+  height: 100px; /* Height of the moving scanline */
+
+  /* Moving scanline gradient */
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0) 5%, /* Transparent at the top */
+    rgba(15, 192, 39, 0.4) 20%, /* Greenish-white streak for glow effect */
+    rgba(0, 0, 0, 0.1) 100% /* Slight fade at the bottom */
+  );
+
+  mix-blend-mode: overlay; /* Ensures proper layering over the image */
+  opacity: 0.15; /* Adjust for visibility */
+  pointer-events: none; /* Allows interactions to pass through */
+  z-index: 12; /* 14: Places it above content and overlay 12: places it above content and below overlay */
+
+  /* NEW: Slight blur effect for text distortion */
+  backdrop-filter: blur(2px); /* Blurs content behind scanline */
+  filter: blur(0.8px); /* Slight blur on the scanline itself */
+
+  /* Animation to move the scanline */
+  animation: scanline 5s linear infinite;
+}
+
+/* Wrapper for Background Image */
+.imageBackground {
+  position: relative; /* Ensures stacking context */
+  width: 100%;
+  height: 100vh; /* Adjust as needed */
+  overflow: hidden;
+}
+
+.imageBackground::before {
+  content: ""; /* Required for pseudo-elements */
+  position: absolute;
+  inset: 0; /* Covers full area */
+  pointer-events: none; /* Allows interactions to pass through, important*/
+
+  /* Background Image */
+  background-image: url("/overlay.svg"); /* Make sure this path is correct */
+  background-size: inherit;      /*inherit for small patterns, cover for large images*/
+  background-position: center;
+  background-repeat: repeat;    /*no-repeat if using cover, repeat if using inherit*/
+  opacity: 0.1;
+
+  z-index: 0; /* Ensures it's behind everything */
+}
+
+/* ==========================================
+   Scanline Animation  
+   Moves the scanline from top to bottom  
+   ========================================== */
+@keyframes scanline {
+  0% { top: 0%; } /* Start at the top */
+  80% { top: 100%; } /* Move down */
+  100% { top: 100%; } /* End at the bottom */
+}
+
+/* ==========================================
+   Responsive Adjustments for Scanline Thickness  
+   Ensures scanlines remain visible across different screen sizes  
+   ========================================== */
+
+/* Adjust for medium screens (tablets, small laptops) */
+@media (max-width: 1024px) {
+    .imageOverlay::before {
+        background-size: 100% 2px; /* Slightly thicker scanlines */
+    }
+}
+
+/* Adjust for small screens (large phones, small tablets) */
+@media (max-width: 768px) {
+    .imageOverlay::before {
+        background-size: 100% 3px; /* Increase thickness for better visibility */
+    }
+}
+
+/* Adjust for very small screens (phones) */
+@media (max-width: 480px) {
+    .imageOverlay::before {
+        background-size: 100% 4px; /* Further increase thickness for tiny screens */
+    }
+}
+
+/* For high-DPI (Retina or 4K) displays */
+@media (min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .imageOverlay::before {
-    content: "";
-    position: absolute;
-    inset: 0; /* Shorthand for top, left, right, bottom */
-    width: 100%;
-    min-height: inherit; /* Makes sure it scales with the container */
-    
-    /* Green tint overlay */
-    background: 
-      linear-gradient(
-        rgba(0, 255, 0, 0.15) 30%, 
-        rgba(0, 0, 0, 0.85) 20%
-      ); /* Simulated CRT tint */
-    
-    background-size: 100% 1px; /* Controls scanline thickness */
-    pointer-events: none; /* Ensures interactions pass through */
-    z-index: 12; /* Ensures it's above content but below the scanline */
-    opacity: 0.8;
-    mix-blend-mode: overlay; /* Ensures a strong green hue */
+    background-size: 100% 4px; /* Thicker scanlines for high-DPI screens */
   }
-  
-  /* Moving Scanline Effect */
-  .imageOverlay::after {
-    content: "";
-    position: absolute;
-    inset: 0; /* Covers the entire image */
-    min-height: inherit; /* Ensures it covers the full content */
-    width: 100%;
-    height: auto; /* Allows the scanline to adapt */
-  
-    /* Moving scanline gradient */
-    background: linear-gradient(
-      0deg,
-      rgba(0, 0, 0, 0) 0%,
-      rgba(255, 255, 255, 0.4) 10%, /* White streak for CRT effect */
-      rgba(0, 0, 0, 0.1) 100%
-    );
-  
-    mix-blend-mode: overlay; /* Ensures proper layering effect */
-    opacity: 0.3; /* Adjust for visibility */
-    pointer-events: none;
-    z-index: 20; /* Ensures it's above content */
-  
-    /* NEW: Slight blur effect for text distortion */
-    backdrop-filter: blur(2px); /* Blurs content behind scanline */
-    filter: blur(0.8px); /* Slight blur on the scanline itself */
-  
-    animation: scanline 5s linear infinite;
+}
+
+/* For 4K screens or higher */
+@media (min-width: 3840px) {
+  .imageOverlay::before {
+    background-size: 100% 2px; /* Thicker scanlines for 4K+ displays */
   }
-  
-  /* Animation for Scanline */
-  @keyframes scanline {
-    0% { top: 0%; }
-    80% { top: 100%; }
-    100% { top: 100%; }
-  }
-  
+}

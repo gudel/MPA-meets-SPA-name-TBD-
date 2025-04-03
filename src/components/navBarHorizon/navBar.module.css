@@ -4,11 +4,13 @@
     position: fixed;
     top: 3rem;
     left: 0;
-    height: auto;
+    height: 2rem;
     width: 100%;
     box-shadow: 0 0 12px rgba(0, 123, 0, 0.2);
     padding: 0 0;
+    /* padding-top: 0.4rem; /*controls the inner padding (affects navbar buttons)*/
     margin: 0 0;
+    /*margin-top: 1.5rem;  /*position the stripe containing the navbar buttons when inactive*/
     display: flex;
     z-index: 2;
     justify-content: center;

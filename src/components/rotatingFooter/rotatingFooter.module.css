@@ -1,16 +1,15 @@
 .text {
-    font-size: 1.125rem; /* Equivalent to Tailwind's text-lg */
-    display: inline-block;
-    min-width: 54px;
-    text-align: center;
-    transition: opacity 0.5s ease-in-out;
-  }
-  
-  .blinkOut {
-    opacity: 0;
-  }
-  
-  .fadeIn {
-    opacity: 1;
-  }
-  
+  font-size: 1.125rem; /* Equivalent to Tailwind's text-lg */
+  display: inline-block;
+  min-width: 54px;
+  text-align: center;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.blinkOut {
+  opacity: 0;
+}
+
+.fadeIn {
+  opacity: 1;
+}

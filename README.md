@@ -17,3 +17,6 @@ This project aims to refine my **ideation → refinement → code prototyping �
 ## Debug log
 
 The product page will be modified to be a pseudo dev log.
+
+## Credits (Will be moved to a dedicated page later)
+Scanline effect - The overlay is inspired and some code borrowed and iterated upon from Edwin at [dev.to.io](https://dev.to/ekeijl/retro-crt-terminal-screen-in-css-js-4afh) and related articles. Here is his [git](https://github.com/custom-start-page/retro-crt).
