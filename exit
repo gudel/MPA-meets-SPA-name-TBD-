@@ -1,0 +1,8 @@
+[33m2c5b5ba[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge branch 'main' of https://github.com/gudel/MPA-meets-SPA-name-TBD-
+[33m979886a[m snapshot: scanline WIP as of 4/1/2025
+[33m3695518[m snapshot: scanline WIP as of
+[33m5bc5648[m Feat: Refactored Navbar image into a clickable button for better mobile compatibility
+[33me1bc87f[m Feat: Refactored UI for mobile-friendly appearance
+[33m1423d02[m feat: Implemented navbar and footer properly.
+[33m6dbe0a3[m Chore: initial commit
+[33m33fc67d[m Initial commit from Create Next App

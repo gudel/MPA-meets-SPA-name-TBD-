@@ -27,7 +27,7 @@ export default function Navbar() {
     return (
         <nav className={styles.navbar}>
             {/* implement image above navbar*/}
-            <div className="absolute top-[-26px] -left-[-32px] w-auto h-auto items-center justify-center z-20 hidden md:block">
+            <button className="absolute top-[-26px] -left-[-32px] w-auto h-auto items-center justify-center z-20 hidden md:block">
                 <div
                     className={`animate-spin [animation-duration:13s] ease-linear relative overflow-visible w-20 h-40 sm:w-22 sm:h-22 drop-shadow-[0_0_8px_rgba(0,255,25,0.8)] bg-gray-200/40 rounded-full flex items-center justify-center ${isInverted ? 'invert' : ''}`} 
                     onClick={toggleMenu} // Add the click event handler
@@ -39,9 +39,9 @@ export default function Navbar() {
                     className="animate-pulse" //animate pulse infinitely
                     />
                 </div>
-            </div>
+            </button>
             {/*image for mobile*/}
-            <div className="absolute top-[-10px] -left-[-10px] w-auto h-auto items-center justify-center z-20 block md:hidden">
+            <button className="absolute top-[-10px] -left-[-10px] w-auto h-auto items-center justify-center z-20 block md:hidden">
                 <div
                     className={`animate-spin [animation-duration:13s] ease-linear relative overflow-visible w-12 h-12 sm:w-22 sm:h-22 drop-shadow-[0_0_8px_rgba(0,255,25,0.8)] bg-gray-200/40 rounded-full flex items-center justify-center ${isInverted ? 'invert' : ''}`} 
                     onClick={toggleMenu} // Add the click event handler
@@ -53,7 +53,7 @@ export default function Navbar() {
                     className="animate-pulse" //animate pulse infinitely
                     />
                 </div>
-            </div>
+            </button>
             
             {/* Conditional rendering of the ul based on the state */}
             {isMenuVisible && (
