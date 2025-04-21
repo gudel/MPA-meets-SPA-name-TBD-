@@ -1,7 +1,7 @@
 'use client'
 import { useRef } from 'react'
 import { Provider } from 'react-redux'
-import { makeStore, AppStore } from './lib/store'
+import { makeStore, AppStore } from './lib/store/store'
 
 //making sure the client component is re-render safe by checking value of reference. ensure its only created once.
 export default function StoreProvider ({

@@ -35,7 +35,7 @@ export default function RootLayout({
       >
         {/* wrap everything in Provider */}
         <StoreProvider>
-          <RenderWrapper>
+        {/* RenderWrapper>
             {/* Navbar (fixed at the top) */}        
             <div className="fixed top-0 left-0 w-full h-30 bg-black/95 bg-blend- z-50 transform isolate shadow-[0_0_20px_2px_rgba(0,255,125,0.2)]">
               <PowerButton />
@@ -50,9 +50,9 @@ export default function RootLayout({
               {children}  {/* Pass content to ScanlineOverlay */}
             </ScanlineOverlay>
             <footer className="fixed bg-blend bottom-0 left-0 w-full h-16 bg-black/90 flex justify-center items-center z-50 shadow-[0_0_20px_2px_rgba(0,255,125,0.2)]">
-              <p className="relative min-w-[200px] text-center">CC-BY-NC-SA 2025 <RotatingText /></p>
+              <p className="relative min-w-[200px] text-center"><RotatingText /></p>
             </footer>
-          </RenderWrapper>
+        {/*  </RenderWrapper> */}
         </StoreProvider>
       </body>
     </html>

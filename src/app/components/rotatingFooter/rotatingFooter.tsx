@@ -2,11 +2,13 @@
 
 import { useState, useEffect } from "react";
 import styles from "./rotatingFooter.module.css";
+import { useAppSelector } from "@/app/lib/hooks";
 
 export default function RotatingText() {
   const texts = ["Sarapz", "gudel", "Endjuro"];
   const [index, setIndex] = useState(0);
   const [isBlinking, setIsBlinking] = useState(false);
+  const isFooterVisible = useAppSelector(state => state.Ui.footerVisible)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -22,9 +24,12 @@ export default function RotatingText() {
     return () => clearInterval(interval);
   }, []);
 
-  return (
+
+  if (!isFooterVisible) return null;
+  else return (<>CC-BY-NC-SA 2025 
     <span className={`${styles.text} ${isBlinking ? styles.blinkOut : styles.fadeIn}`}>
       {texts[index]} 
-    </span> //simulate animation
-  );
+    </span> 
+    </>
+  );//simulate animation in span
 }

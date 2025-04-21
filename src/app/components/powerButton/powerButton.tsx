@@ -1,25 +1,29 @@
     'use client'
 
     import { useState } from "react"
-    import { useDispatch } from "react-redux"
+    import { useAppDispatch } from "@/app/lib/hooks"
     import Image from "next/image"
     import styles from "./powerButton.module.css"
-
+    import { powerSignal } from "@/app/lib/store/actions/actions"
+    
     //default function, boot control
     export default function PowerButton() {
         const [isOn, setIsOn] = useState (false);
-        const dispatch = useDispatch();
+        const dispatch = useAppDispatch();
         
+
         //type enforcement
         interface bootStatus {
             state: 'on' | 'off';
         }
     const bootState = () => {
-        const status : bootStatus =  {state: !isOn ? 'on' : 'off'}
-        setIsOn(!isOn);
-        dispatch ({type: 'boot_state_status', payload:status })
+        const status : bootStatus =  {state: !isOn ? 'on' : 'off'}  //manages own state, doesn't care about global.
+        setIsOn(!isOn); // isolated render.
+        dispatch (powerSignal(status.state));  //Still don't get it(?) Does importing the toggle allows this?
+        console.log("update", powerSignal(status.state));
     };
 
+    
     return (
         <>
         <div className={`absolute border-2 rounded-full h-8 w-10 top-21 right-2 hidden md:block ${styles.borderOpacity} ${styles.customDropShadow}`}>
