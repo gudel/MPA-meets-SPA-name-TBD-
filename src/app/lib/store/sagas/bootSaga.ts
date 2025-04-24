@@ -1,6 +1,6 @@
 import { takeEvery, put, delay } from "redux-saga/effects";
 import { powerSignal } from "../actions/actions";
-import { setPower, setBootStatus, setNavbarVisibility, setScanlineVisibility, setFooterVisibility, toggleNavbar, toggleFooter, toggleScanline } from "../reducers/UiSlice";
+import { setPower, setBootStatus, setNavbarVisibility, setScanlineVisibility, setFooterVisibility, setContentGateVisible, setBootScreenVisibility } from "../reducers/UiSlice";
 
 function* handlePowerSignal(action: any) {
     console.log('saga screams:', action);
@@ -10,25 +10,38 @@ function* handlePowerSignal(action: any) {
 
     yield put(setPower(powerState));
 
-    //verbosity>abstraction. Intent is clear. black boxes are a scourge. This thing didn't run and I'm at my wits
+    //verbosity>abstraction. Intent is clear. black boxes are a scourge. 
     if (powerState === 'on') {
         yield put(setPower('on')); // internal state for debugging purposes
         yield put(setBootStatus('working')); // state tracking for debug
+        yield delay(200);
         yield put(setScanlineVisibility(true));
-        yield delay(2000);
+        yield delay(800);
+        yield put(setBootScreenVisibility(true));
+        yield delay (200);
         yield put(setNavbarVisibility(true));
-        yield delay(2000);
+        yield delay(800);
         yield put(setFooterVisibility(true));
-        yield delay (2000);
+        yield delay (800);
+        yield put(setBootScreenVisibility(false));
+        yield delay (200);
+        yield put(setContentGateVisible(true));
         yield put(setPower('idle'));
         yield put(setBootStatus('idle'));
     } else {
         yield put(setPower('off'));
         yield put(setBootStatus('working'));
+        yield delay(200);
+        yield put(setContentGateVisible(false));
+        yield delay(200);
+        yield put(setBootScreenVisibility(true));
+        yield delay(1000);
         yield put(setFooterVisibility(false));
         yield delay(1000);
         yield put(setNavbarVisibility(false));
         yield delay(1000);
+        yield put(setBootScreenVisibility(false));
+        yield delay (200);
         yield put(setScanlineVisibility(false));     
         yield delay (1000);
         yield put(setPower('idle'));   

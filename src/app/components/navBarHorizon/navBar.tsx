@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./navBar.module.css"; // import the css module for navbar
 import Image from "next/image";
 import { useAppSelector } from "@/app/lib/hooks";
@@ -30,7 +30,13 @@ export default function Navbar() {
         setIsInverted(prevState => !prevState); // Toggle the invert state
     };
 
-    // Gate rendering the component, controlled by renderwrapper?
+    useEffect(() => {
+        if (!isNavbarVisible) {
+            setIsMenuVisible(false);  // Close the menu if navbar is hidden, comment this feat if tanking performance.
+        }
+    }, [isNavbarVisible]);  // Depend on isNavbarVisible to trigger when it changes
+
+    // Gate rendering the component, controlled by BootSaga.
     if (!isNavbarVisible) return null;
 
     else return (

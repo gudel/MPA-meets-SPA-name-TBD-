@@ -26,10 +26,11 @@ export default function RotatingText() {
 
 
   if (!isFooterVisible) return null;
-  else return (<>CC-BY-NC-SA 2025 
-    <span className={`${styles.text} ${isBlinking ? styles.blinkOut : styles.fadeIn}`}>
-      {texts[index]} 
-    </span> 
+  else return (
+    <>CC-BY-NC-SA 2025&nbsp;
+      <span className={`${styles.text} ${isBlinking ? styles.blinkOut : styles.fadeIn}`}>
+        {texts[index]} 
+      </span> 
     </>
   );//simulate animation in span
 }

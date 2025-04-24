@@ -2,11 +2,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 //state structure definitions
 interface UiState  {
-    power : 'on' | 'off' | 'idle' ;
+    power : 'on' | 'off' | 'idle' ; //saga activity tracker
     scanlineVisible : boolean;
     navbarVisible : boolean;
     footerVisible : boolean;
-    bootStatus: 'working' | 'idle';
+    contentGateVisible: boolean;
+    bootScreenVisible: boolean;
+    bootStatus: 'working' | 'idle'; //bug tracker, internal
 }
 
 //define initial state
@@ -15,6 +17,8 @@ const initialState: UiState = {
     scanlineVisible : false,
     navbarVisible : false,
     footerVisible : false,
+    bootScreenVisible: false,
+    contentGateVisible : false,
     bootStatus: 'idle',
 }
 
@@ -33,11 +37,17 @@ const UiSlice = createSlice ({
         toggleFooter: (state) => {
             state.footerVisible = !state.footerVisible;
         },
+        setContentGateVisible: (state, action:PayloadAction<boolean>) => {
+            state.contentGateVisible = action.payload;
+        },
         setPower: (state, action: PayloadAction< 'on' | 'off' | 'idle' >) => {
             state.power = action.payload; //debug state, used for signal tracking
         },
         setBootStatus: (state, action: PayloadAction< 'idle' | 'working'>) => {
-            state.bootStatus = action.payload;
+            state.bootStatus = action.payload; //BootWorkerStatus.
+        },
+        setBootScreenVisibility: (state, action: PayloadAction<boolean>) => {
+            state.bootScreenVisible = action.payload; //saga says this is not an action?
         },
         setNavbarVisibility: (state, action: PayloadAction<boolean>) => {
             state.navbarVisible = action.payload;
@@ -61,6 +71,8 @@ export const {
     setNavbarVisibility,
     setScanlineVisibility,
     setFooterVisibility,
+    setBootScreenVisibility,
+    setContentGateVisible,
 } = UiSlice.actions;
 
 export default UiSlice.reducer;
