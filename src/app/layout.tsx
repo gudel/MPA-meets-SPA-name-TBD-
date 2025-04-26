@@ -1,20 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { VT323} from "next/font/google";
 import "./globals.css";
 import Navbar from "@/app/components/navBarHorizon/navBar";
 import RotatingText from "@/app/components/rotatingFooter/rotatingFooter";
 import ScanlineOverlay from '@/app/components/scanlineOverlay/scanlineOverlay';  // Import the ScanlineOverlay component
 import StoreProvider from "./StoreProvider";
 import PowerButton from "./components/powerButton/powerButton";
+import Loader from "./components/Loader/Loader";
 
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const Terminal = VT323({
+  variable: "--font-VT323",
+  weight: ["400"],
   subsets: ["latin"],
 });
 
@@ -27,11 +24,11 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>) { 
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${Terminal.variable} antialiased`}
       >
         {/* wrap everything in Provider */}
         <StoreProvider>
@@ -50,7 +47,10 @@ export default function RootLayout({
               <div className="relative mt-30 max-h-[calc(100dvh-10rem-1.5rem)] overflow-y-auto overflow-x-hidden">
                 {/*Padding enforcement; global setting.*/}
                 <div className="p-2">
+                  {/*injected below or above the ContentGate component inside the ScanLineOverlay component*/}
+                  <Loader>
                   {children}  {/* Pass content to ScanlineOverlay */}
+                  </Loader>
                 </div>
               </div>
             </ScanlineOverlay>

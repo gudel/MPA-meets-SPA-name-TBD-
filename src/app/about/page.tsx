@@ -9,7 +9,7 @@ export default function Product() {
         <li><button>b</button></li>
         </ul></section>
         <section className="flex justify-center place-items-center">
-                <p>I'm cooked, chat.</p>
+                <p>I&apos;m cooked, chat.</p>
         </section>
         </main>
     </div>

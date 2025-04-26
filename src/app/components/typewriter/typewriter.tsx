@@ -1,4 +1,4 @@
-import styles from './typewriter.module.css'
+
 import { ReactNode } from "react";
 
 interface TypewriterProps {

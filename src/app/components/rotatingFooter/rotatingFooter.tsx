@@ -22,7 +22,7 @@ export default function RotatingText() {
     }, 2000); // Total cycle: 2s
 
     return () => clearInterval(interval);
-  }, []);
+  },);
 
 
   if (!isFooterVisible) return null;

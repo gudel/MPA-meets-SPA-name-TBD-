@@ -19,7 +19,7 @@
     const bootState = () => {
         const status : bootStatus =  {state: !isOn ? 'on' : 'off'}  //manages own state, doesn't care about global.
         setIsOn(!isOn); // isolated render.
-        dispatch (powerSignal(status.state));  //Still don't get it(?) Does importing the toggle allows this?
+        dispatch (powerSignal(status.state));  // updates state on reducer.
         console.log("update", powerSignal(status.state));
     };
 
@@ -31,7 +31,7 @@
         onClick={bootState}
         className={`flex relative bg-[rgba(255,0,0,0.3)] h-full w-full rounded-full overflow-hidden drop-shadow-[0_0_2px_rgba(255,255,25,0.8)] ${isOn ? styles.invertedImage : styles.defaultImage}`}>
             <Image 
-            src="cat.svg"
+            src="/Cat.svg"
             alt="power" 
             fill
             className={`drop-shadow-[0_0_8px_rgba(0,255,25,0.8)] ${isOn ? styles.invertedImage : styles.defaultImage}`}
@@ -45,7 +45,7 @@
          onClick={bootState}
          className={`flex relative bg-[rgba(255,0,0,0.3)] h-full w-full rounded-full overflow-hidden drop-shadow-[0_0_2px_rgba(255,255,25,0.8)] ${isOn ? styles.invertedImage : styles.defaultImage}`}>
              <Image 
-             src="cat.svg"
+             src="/Cat.svg"
              alt="power" 
              fill
              className={`drop-shadow-[0_0_8px_rgba(0,255,25,0.8)] ${isOn ? styles.invertedImage : styles.defaultImage}`}

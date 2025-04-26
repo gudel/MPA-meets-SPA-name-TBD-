@@ -1,8 +1,9 @@
 import { takeEvery, put, delay } from "redux-saga/effects";
 import { powerSignal } from "../actions/actions";
+import { PayloadAction } from "@reduxjs/toolkit";
 import { setPower, setBootStatus, setNavbarVisibility, setScanlineVisibility, setFooterVisibility, setContentGateVisible, setBootScreenVisibility } from "../reducers/UiSlice";
 
-function* handlePowerSignal(action: any) {
+function* handlePowerSignal(action: PayloadAction<'on'|'off'>) {
     console.log('saga screams:', action);
     console.log('navbar', setNavbarVisibility);
 

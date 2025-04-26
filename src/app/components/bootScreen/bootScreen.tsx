@@ -10,10 +10,10 @@ const BootScreen = () => {
     else return (
         <div className="grid place-items-center fixed inset-0">
         <Image
-        src="./cat.svg"
+        src="/Cat.svg"
         alt="Boot logo"
-        height= "120"
-        width= "120"
+        height= {120}
+        width= {120}
         className="animate-ping"
         />
         </div>
