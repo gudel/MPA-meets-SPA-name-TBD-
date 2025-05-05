@@ -1,0 +1,14 @@
+/* ==========================================
+   Manual animation, cursor blink.
+   Simulates CLI cursor with near 100% fidelity. 
+   ========================================== */
+
+@keyframes blink {
+    50% {
+      opacity: 0.0;
+    }
+  }
+  .cursor {
+    animation: blink 0.5s step-start 0s infinite;
+    animation-timing-function: cubic-bezier(0.5, 0, 0.5, 1); /*simulate phospor effects of CRT */
+  }
