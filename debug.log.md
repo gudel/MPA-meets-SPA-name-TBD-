@@ -1,4 +1,5 @@
 [4/4/2025]
+
 Scanline Thickness Issue
 1. Initial Issue
 
@@ -214,62 +215,259 @@ Actions taken:
 - Prototyped a simple saga sequential chain with some help.
 - started to identify that rootReducer and rootSaga is needed for modularity, even with extra overhead.
 
-[4/20/2025]
+  [4/20/2025]
 
-Saga implementation, debugging session.
+  Saga implementation, debugging session.
 
-Problem: Saga double fires signal to reducer, effectively canceling the intended effect.
+  Problem: Saga double fires signal to reducer, effectively canceling the intended effect.
 
-Tracking: added console log at specific points of the saga and reducer. 'init' at start of saga, 'saga hit (x)' at the step that is not firing, and 'saga reached (x)' in the reducer state change itself.
+  Tracking: added console log at specific points of the saga and reducer. 'init' at start of saga, 'saga hit (x)' at the step that is not firing, and 'saga reached (x)' in the reducer state change itself.
+
+  Hypothesis:
+  - Naming convention
+  - Faulty saga and reducer sync to component.
+  - Improper selector configuration.
+
+  Steps taken:
+  - renaming saga and reducer. (minimal effect)
+  - combining both into root configurations. (does nothing)
+  - reconfigured `useAppDispatch` hook in emmiter component (does nothing)
+  - reconfigured `useAppSelector` hook in receiver component (improved signal tracking, does not change behavior)
+  - deleted steps, logging which reducer gets removed from the saga manually. (inconsistent behavior)
+
+  Analysis:
+  - naming convention is the problem (contested, minimal if at all behavior change)
+  - scattered saga and reducer configuration (disproved, combining both into root shows the same behavior)
+  - files linkage (considered, but signal tracking via console.log() contests this heavily)
+  - one of the process breaks the intended effect. (possible, produces inconsistent behavior when fiddled with)
+
+  Debug:
+  - analyse linkage between saga, reducer and store (passed)
+  - analyse emmiter component (passed)
+  - analyse receiver component (passed)
+  - analyse process itself. (unclear signal)
+  - try: modifying steps in saga (produces change in behavior)
+  - analyse `toggleX` reducer in slice (noticed a switch function)
+  - try: removing `togglex` actions from the saga itself (issue clears)
+  - try: adding one `togglex` action from back into the saga (issue reappears)
+
+  verdict:
+  - `toggleXcomponent` reducer sets `setXVisible` reducer directly. Producing a double toggle that cancels the intended effect [off->on] and instead produces [off->on->on].
+
+  next step:
+  - critical: Make sure the {children} renders last. Accept tradeoffs no matter what.
+  - wire the component properly to the saga. remove the `toggleX` component from the reducer or refactor it as side effects.
+
+  [4/21/2025]
+
+  Current status: 
+  - roughly implemented stepper orchestration.
+  - making sure {children} renders last is surprisingly... easier than anticipated.
+  - tried applying useEffect so navbar resets each time it gets removed from render with the following code: 
+  ```ts
+  useEffect(() => {
+          if (!isNavbarVisible) {
+              setIsMenuVisible(false);  // Close the menu if navbar is hidden
+          }
+      }, [isNavbarVisible]);  // Do not change unless isNavbarVisible changed.
+  ```
+      ditched the idea. Breaks UX, previous behaviour simulates cache better.
+
+  Todo: 
+  - advanced animation orchestration (?)
+  - consider using lazyloader as a fast animation placeholder. should give illusion of speed for UX.
+
+  [4/22/2025]
+
+  Problem: Viewport overflow. {children} bleeds over and keeps triggering scrollbar, which breaks UI.
+
+  Tracking: Visual confirmation, hard refresh each time.
+
+  Debug steps:
+  - Constrained the `<ContentWrapper />` component by wrapping it with a div. Managed to constraint the scrollbar to the `<div>` itself. Inconsistent behavior.
+  - Added margins and padding via TailwindCSS to the `<div>` constraining `<ContentWrapper />`. This is also, inconsistent.
+  - Moved one component up to `<ScanlineOverlay />` and wrapped the {Children} there with a `<div>`. This introduces more entrophy and inconsistencies.
+
+  Hypothesis:
+  - CSS conflict.
+  - CSS re-calculation during refresh and page navigation.
+
+  Try:
+  - Reversing steps; Nothing significant occurs. Inconsistent behavior is present.
+  - Reducing styling to atomicity for content;
+    - Removed everything but the `<div>` inside `<ContentWrapper />`. Inconsistencies present. scrollbar gets recalculated on page reload or navigation.
+    - Moved one component up and only applies `<div>` below `<ScanlineOverlay />` but above `<ContentWrapper />`. Same behavior observed.
+    - Moved to global Layout and add `<div>` wrapping anything below `<ScanlineOverlay />` in layout.tsx with custom height calculation, taking into consideration NavBar and Footer height. Stable, cleared the issue.
+  ```tsx
+  {/* Wrapping children with ScanlineOverlay. ScanlineOverlay>ContentGate>Children */}            
+              <ScanlineOverlay>
+                {/*div creates absolute viewport position; forces scrollbar to viewport*/}
+                <div className="relative mt-30 max-h-[calc(100dvh-10rem-1.5rem)] overflow-y-auto overflow-x-hidden">
+                    {children}  {/* Pass content to ScanlineOverlay */}
+                  </div>
+                </div>
+              </ScanlineOverlay>
+  ```
+
+
+  Sub-issue: 
+  - Content has no padding. Applying padding directly to content affects the scrollbar positioning.
+  - Duplicate scrollbar present. Default web browser scrollbar and the one constrained by the `<div>`.
+
+  Solution:
+  - Added another `<div>` below the viewport constraint to control padding. Done this way to not mutate the scrollbar.
+  ```tsx
+  {/* Wrapping children with ScanlineOverlay. ScanlineOverlay>ContentGate>Children */}            
+              <ScanlineOverlay>
+                {/*div creates absolute viewport position; forces scrollbar to viewport*/}
+                <div className="relative mt-30 max-h-[calc(100dvh-10rem-1.5rem)] overflow-y-auto overflow-x-hidden">
+                  {/*Padding enforcement; global setting.*/}
+                  <div className="p-2">
+                    {children}  {/* Pass content to ScanlineOverlay */}
+                  </div>
+                </div>
+              </ScanlineOverlay>
+  ```
+  - Disabled global scrollbar by adding `overflow: hidden;` to CSS body class.
+
+  Conclusion:
+  - Problem with div stacking.
+  - multiple padding and margin stacking forcing re-calculation on page reload.
+
+  Lesson learned:
+  - Do not stack styling without properly confirming effects.
+  - If forced to, design better. ensure no side effects is possible.
+
+  TODO:
+  - Learn what breaks this.
+  - create loader animation for boot/shutdown sequeence.
+
+
+  [4/24/2025]
+
+  Progress achieved: "dumb" loader animation for boot/shutdown sequence.
+
+  Problem: 
+  - when testing for build, linter protested at multiple files.
+
+  Debug:
+  - Read the terminal error one by one and tracked each error manually.
+
+  Result:
+  - Build complete.
+
+  Sub-problem:
+  - Image for bootloader and power button did not get displayed correctly when running compiled build locally.
+
+  Tracking & debug:
+  - Validated file path in both `<BootScreen />` and `<PowerButton />` component, 2 times.
+  - Assumed cache issue and rebuilt (recompiles?) the project three times.
+  - Tried deleting Cache to validate it's a cache issue, issue persists after cache is cleared via hard reload on browser.
+  - Considered if next.js build is stale. `rm -rf .next` is considered as one of the resolving path but held off until further validation is confirmed.
+  - Use `npx serve public` to validate `/public` is being resolved on a simulated server. Validated.
+  - Validated path again via powershell command `Get-ChildItem -Path . -Recurse -Filter "cat.svg"`. File is validated and confirmed to be present.
+  - Checking the path in each file, again, discovered a basic mistake. A mismatch between actual file name and the file name in the path. "Cat.png" is written as "cat.png". Correcting the mistake resolves the issue.
+
+  Confirmed: Case mismatch.
+
+  Hypothesis:
+  - `pnpm dev run` gives some leeway with naming conventions, making small mistakes invisible during development.
+  - `pnpm build` will compile even with the case mismatch.
+  - `pnpm start` will run and point to a missing file.
+  - Windows OS issue? Probably. Will find out more.
+
+  Lesson learned: 
+  - Squint harder when checking PATH and filenames. When everything doesn't solve the problem then the mistake is in syntax level.
+
+[5/2/2025]
+
+Floating component display bug.
+
+Problem: when implementing the comment page, my intentions are to make it so it's a double collumn with the right collum being scrollable while the right collumn is sticky so it floats as the page is scrolled on normal desktop resolution. It does not do that and instead scrolls along the page, becoming a pseudo-static component in the page render.
+
+Try: 
+- Conventional method like using 'sticky' in tailwindcss and declaring parent component scrollable. Does not affect the behavior.
+- Changing to a grid layout for this specific page. No change in behavior.
+- Tried imposing hard height calculation in the parent component. No change in behavior.
 
 Hypothesis:
-- Naming convention
-- Faulty saga and reducer sync to component.
-- Improper selector configuration.
-
-Steps taken:
-- renaming saga and reducer. (minimal effect)
-- combining both into root configurations. (does nothing)
-- reconfigured `useAppDispatch` hook in emmiter component (does nothing)
-- reconfigured `useAppSelector` hook in receiver component (improved signal tracking, does not change behavior)
-- deleted steps, logging which reducer gets removed from the saga manually. (inconsistent behavior)
-
-Analysis:
-- naming convention is the problem (contested, minimal if at all behavior change)
-- scattered saga and reducer configuration (disproved, combining both into root shows the same behavior)
-- files linkage (considered, but signal tracking via console.log() contests this heavily)
-- one of the process breaks the intended effect. (possible, produces inconsistent behavior when fiddled with)
+- As it relates to scrollable component, perhaps the issue is tied to layout declarations.
+- As it relates to page layout, perhaps global layout affects the configuration downstream since `/comments` is considered a `{children}` in the application.
+- Viewport configuration overriding scroll inheritance configuration downstream.
 
 Debug:
-- analyse linkage between saga, reducer and store (passed)
-- analyse emmiter component (passed)
-- analyse receiver component (passed)
-- analyse process itself. (unclear signal)
-- try: modifying steps in saga (produces change in behavior)
-- analyse `toggleX` reducer in slice (noticed a switch function)
-- try: removing `togglex` actions from the saga itself (issue clears)
-- try: adding one `togglex` action from back into the saga (issue reappears)
+- Observe global `layout.tsx`.
+- Confirmed that global viewport settings affect `{children}` page render configuration downstream.
+- Considered refactoring the entire structure, but throws it away as it's too much of a hassle to do.
+- Considered if manually orchestrating the component via hardcoded positional configuration is more viable for simplicity.
 
-verdict:
-- `toggleXcomponent` reducer sets `setXVisible` reducer directly. Producing a double toggle that cancels the intended effect [off->on] and instead produces [off->on->on].
+Solution:
+A very crude solution, but one that works for the intended effect by inverting tailwind asssumption and ensuring that desktop first configuration is achieved while letting it auto configure for mobile:
+```tsx
+  <div className="flex flex-col md:flex-row max-w-5xl min-h-screen mx-auto py-8 gap-6">
+            <div className="md:w-[60%] flex-1 overflow-y-auto">
+            <h1 className="text-xl font-bold mb-4">Comments</h1>
+            <CommentList />
+            </div>
+            {/*Crude method to force the CommentForm to float, but it's a calculated tradeoff*/}
+            <div className="md:w-[40%] md:fixed md:top-35 md:right-4 md:justify-start">
+            <h1 className="text-2xl font-bold mt-4 mb-2">Leave a comment!</h1>
+            <CommentForm />
+            </div>
+        </div>
+```
 
-next step:
-- critical: Make sure the {children} renders last. Accept tradeoffs no matter what.
-- wire the component properly to the saga. remove the `toggleX` component from the reducer or refactor it as side effects.
+Lesson learned:
+- Go for a faster and cleaner solution when it's apparent and available since the start. Ensure it is isolated so it doesn't break cohesiveness.
 
-[4/21/2025]
-
-Current status: 
-- roughly implemented stepper orchestration.
-- making sure {childern} renders last is surprisingly... easier than anticipated.
-- tried applying useEffect so navbar resets each time it gets removed from render with the following code: ```ts
- useEffect(() => {
-        if (!isNavbarVisible) {
-            setIsMenuVisible(false);  // Close the menu if navbar is hidden
-        }
-    }, [isNavbarVisible]);  // Do not change unless isNavbarVisible changed.```
-     ditched the idea. Breaks UX, previous behaviour simulates cache better.
-
-Todo: 
-- advanced animation orchestration (?)
-- consider using lazyloader as a fast animation placeholder. should give illusion of speed for UX.
+/app
+  /lib
+    /store
+      /actions
+        actions.ts         ← defines power button for now
+      /sagas
+        bootSaga.ts        ← controls boot up sequence
+      /reducers
+        UiSlice.ts         ← boot reducer.
+      rootReducer.ts       ← root reducer (RTK?)
+      rootSaga.ts          ← Root saga (saga)
+      store.ts             ← global store 
+    db.ts                  ← db connection config
+    hooks.ts               ← shared hooks (useAppDispatch, etc.)
+  /api
+    /comments
+      route.ts            ← REST functions for comment (GET, POST, etc.)
+  /components
+    /bootScreen
+      bootScreen.tsx
+    /contentGate
+      contentGate.tsx
+    /navbar
+      navBar.module.css
+      navBar.tsx
+    /rotatingFooter
+      rotatingFooter.module.css
+      rotatingFooter.tsx
+    /overlay
+      scanlineOverlay.module.css
+      scanlineOverlay.tsx
+    /powerButton
+      powerButton.module.css
+      powerButton.tsx
+    /loader
+      Loader.tsx
+    /comments
+      CommentForm.tsx     
+      CommentList.tsx
+  /devBlog
+    /[articles]             ←  prepared 'articles' slug folder
+  /about
+      page.tsx              ← 'dev logs' type blog
+  /about
+      page.tsx              ← prepared page for 'credit'
+  /comments
+    page.tsx                ← comment page
+  page.tsx                  ← default route
+  globals.css               ← global css
+  StoreProvider.tsx         ← global store provider
+  layout.tsx                ← RootLayout entry point (Next.js)
