@@ -20,10 +20,11 @@
 .navList {
     list-style: none;
     display: flex;
-    gap: 1.5rem;
+    gap: 0.5rem;
     padding: 0;
     margin: 0;
     z-index: 1;
+    columns: auto;
 }
 
 /* Default link styles */
@@ -56,3 +57,9 @@
         box-shadow: 0 0 20px rgba(0, 123, 0, 1);
     }
 }
+/*nuclear option. firefox does not want to render properly.*/
+@-moz-document url-prefix() {
+    .navbar button {
+      top: 14px !important;
+    }
+  }
