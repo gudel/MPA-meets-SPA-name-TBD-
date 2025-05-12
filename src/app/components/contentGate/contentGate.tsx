@@ -7,10 +7,9 @@ import { useAppSelector } from "@/app/lib/hooks";
 // aimed to simulate system behavior.
 
 const ContentGate: React.FC<{children: React.ReactNode}> = ({children}) => {
-    const isContentGateVisible = useAppSelector(state => state.Ui.contentGateVisible);
+    const active = useAppSelector(state => state.Ui.contentGateVisible);
 
-    if(!isContentGateVisible) return null;
-    else return children;
+    return active ? children : null;
         
 };
 

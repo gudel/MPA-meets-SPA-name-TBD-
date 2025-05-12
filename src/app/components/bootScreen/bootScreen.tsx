@@ -1,13 +1,11 @@
 'use client'
-
 import { useAppSelector } from "@/app/lib/hooks"
 import Image from "next/image";
 
 const BootScreen = () => {
-    const isBootScreenVisible = useAppSelector(state=>state.Ui.bootScreenVisible);
+    const active = useAppSelector(state=>state.Ui.bootScreenVisible);
 
-    if(!isBootScreenVisible) return null;
-    else return (
+  return active ? (
         <div className="grid place-items-center fixed inset-0">
         <Image
         src="/Cat.svg"
@@ -17,7 +15,7 @@ const BootScreen = () => {
         className="animate-ping"
         />
         </div>
-    )
+    ) : null
 };
 
 export default BootScreen;

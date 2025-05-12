@@ -1,3 +1,5 @@
+/*Verbosity is intended because this is a complex component.
+/*Comments is justified for dev. Linter can be configured to remove comments.
 /* ==========================================
    Main wrapper to contain the overlay  
    Ensures no layout shifting while applying effects  
