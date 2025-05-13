@@ -1,50 +1,53 @@
-import { takeEvery, put, delay } from "redux-saga/effects";
+import { put, delay, takeLatest } from "redux-saga/effects";
 import { powerSignal } from "../actions/actions";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { setPower, setBootStatus, setNavbarVisibility, setScanlineVisibility, setFooterVisibility, setContentGateVisible, setBootScreenVisibility } from "../reducers/UiSlice";
 
-function* handlePowerSignal(action: PayloadAction<'on'|'off'>) {
-    console.log('saga screams:', action);
-    console.log('navbar', setNavbarVisibility);
-
+const timing = {
+    bootStatus : 200,
+    scanline : 800,
+    components: 600,
+}
+function* handlePowerSignal(action: PayloadAction<'on'|'off'>) {  
     const powerState = action.payload;
-
-    yield put(setPower(powerState));
-
-    //verbosity>abstraction. Intent is clear. black boxes are a scourge. 
-    if (powerState === 'on') {
-        yield put(setPower('on')); // internal state for debugging purposes
-        yield put(setBootStatus('working')); // state tracking for debug
-        yield delay(200);
+    //verbosity>abstraction. 
+    //delay === ms
+    //BIOS like sequence orchestration. Imperative atomic logic.
+    //Refer to [4/12/2025] entry in debug.log.md for flow sequence.
+    //powerState !== setPower. Do not confuse. powerState lives in action.ts. setPower lives in reducer.
+    if (powerState === 'on') { 
+        yield put(setPower('on')); // internal state for debugging purposes. 
+        yield put(setBootStatus('working')); //second buffer, turns off powerButton mid sequence.
+        yield delay(timing.bootStatus);
         yield put(setScanlineVisibility(true));
-        yield delay(800);
+        yield delay(timing.scanline);
         yield put(setBootScreenVisibility(true));
-        yield delay (200);
+        yield delay (timing.components);
         yield put(setNavbarVisibility(true));
-        yield delay(800);
+        yield delay(timing.components);
         yield put(setFooterVisibility(true));
-        yield delay (800);
+        yield delay (timing.components);
         yield put(setBootScreenVisibility(false));
-        yield delay (200);
+        yield delay (timing.bootStatus);
         yield put(setContentGateVisible(true));
         yield put(setPower('idle'));
-        yield put(setBootStatus('idle'));
+        yield put(setBootStatus('idle')); //idle === task complete. unlock powerbutton, system standby.
     } else {
         yield put(setPower('off'));
         yield put(setBootStatus('working'));
-        yield delay(200);
+        yield delay(timing.bootStatus);
         yield put(setContentGateVisible(false));
-        yield delay(200);
+        yield delay(timing.components);
         yield put(setBootScreenVisibility(true));
-        yield delay(1000);
+        yield delay(timing.components);
         yield put(setFooterVisibility(false));
-        yield delay(1000);
+        yield delay(timing.components);
         yield put(setNavbarVisibility(false));
-        yield delay(1000);
+        yield delay(timing.components);
         yield put(setBootScreenVisibility(false));
-        yield delay (200);
+        yield delay (timing.scanline);
         yield put(setScanlineVisibility(false));     
-        yield delay (1000);
+        yield delay (timing.bootStatus);
         yield put(setPower('idle'));   
         yield put(setBootStatus('idle'));
     }
@@ -55,5 +58,6 @@ function* handlePowerSignal(action: PayloadAction<'on'|'off'>) {
 // I don't know why, the linter protests a lot with `function`.
 // I would love to be corrected if this is the wrong pattern by a senior wizard.
 export function* uiSaga() {
-    yield takeEvery(powerSignal.type, handlePowerSignal);
+    yield takeLatest(powerSignal.type, handlePowerSignal); //ensure no action spam relative to user actions.
+    //yield takeEvery(powerSignal.type, handlePowerSignal); //default behavior is not hardened against click spams.
 }

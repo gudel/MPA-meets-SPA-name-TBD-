@@ -27,16 +27,6 @@ const UiSlice = createSlice ({
     name: 'Ui',
     initialState,
     reducers: {
-        // togglestates === ?? I don't understand this :/
-        toggleNavbar: (state) => {
-            state.navbarVisible = !state.navbarVisible;
-        },
-        toggleScanline: (state) => {
-            state.scanlineVisible = !state.scanlineVisible;
-        },
-        toggleFooter: (state) => {
-            state.footerVisible = !state.footerVisible;
-        },
         setContentGateVisible: (state, action:PayloadAction<boolean>) => {
             state.contentGateVisible = action.payload;
         },
@@ -63,9 +53,6 @@ const UiSlice = createSlice ({
 });
 
 export const {
-    toggleNavbar,
-    toggleScanline,
-    toggleFooter,
     setPower,
     setBootStatus,
     setNavbarVisibility,
