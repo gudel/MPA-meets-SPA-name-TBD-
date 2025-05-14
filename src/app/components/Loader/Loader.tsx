@@ -15,14 +15,13 @@ const [loading, setLoading] = useState(false); //set state
 const [percentage, setPercentage] = useState(0); //loading illusion
 
 
-//wtf is this pattern. my head.
-//Yes it still looks like  a black box to me. useLayoutEffect used over useEffect because it handles hydration race better.
+// useLayoutEffect used over useEffect because it handles hydration race better.
 // 5/4/2025: applied basic math. remove it for negligent performance gain if 'performance' is considered a good thing.
 // it is not, this is nextjs. js frameworks are heavy. This component exploits that.
 useLayoutEffect (() => {
     setLoading(true);
-     // Random start between 20-70% for precentage illusion
-     const start = Math.floor(Math.random() * 50) + 20;
+     // Random start between math value for precentage illusion
+     const start = Math.floor(Math.random() * 20) + 40;
      setPercentage(start);
     const timer = setTimeout(() => {
     setLoading(false);
@@ -51,6 +50,13 @@ useLayoutEffect (() => {
         <p>{`$[user]> ../local/ mounting/${pathname}....`}</p>
         <p>{`$[sys]> Loading modules.... [${percentage}%]`}<span className={`${styles.cursor}`}>█</span></p>
         </>
+        {/* loading bar binded to percentage logic*/}
+        <div className="w-full bg-neutral-800 opacity-30 h-2 mt-2">
+          <div
+          className="bg-green-400 h-full transition-all duration-200 ease-linear"
+          style={{ width: `${percentage}%` }}
+          />
+        </div>
         </div>
       </div>
     ) : (
