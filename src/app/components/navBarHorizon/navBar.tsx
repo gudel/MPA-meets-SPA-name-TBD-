@@ -11,7 +11,7 @@ import { useAppSelector } from "@/app/lib/hooks";
 export const navItems = [
     { name: "Home", href: "/" },
     { name: "Dev log", href: "/devBlog" },
-    { name: "Credits", href: "/credits" },
+    { name: "About", href: "/about" },
     { name: "Comments", href: "/comments"}
   ];
 
@@ -23,8 +23,8 @@ export default function Navbar() {
 
      // Function to toggle the visibility of the <ul> and invert effect
      const toggleMenu = () => {
-        setIsMenuVisible(prevState => !prevState); // Toggle the <ul>
-        setIsInverted(prevState => !prevState); // Toggle the invert state
+        setIsMenuVisible(prevState => !prevState); // <ul>
+        setIsInverted(prevState => !prevState); // invert state
     };
 
     // Gate rendering the component, controlled by BootSaga.

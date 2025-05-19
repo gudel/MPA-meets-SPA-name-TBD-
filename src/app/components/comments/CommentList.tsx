@@ -26,7 +26,7 @@ return(
     <li key={comment.id} className="border-p-4">
         <p className="text-sm text-green-400">{comment.author}</p>
         <p>{comment.text}</p>
-        <p className="text-xs text-gray-400">{new Date(comment.created_at).toLocaleString()}</p>
+        <p className="text-xs text-gray-300">{new Date(comment.created_at).toLocaleString()}</p>
     </li>
 ))}
 </ul>

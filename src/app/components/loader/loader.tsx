@@ -6,7 +6,7 @@
 'use client'
 import { usePathname } from "next/navigation"; //APP Router. get current path.
 import { useLayoutEffect, useState } from "react";  // hooks, side effects and state.
-import styles from './Loader.module.css'
+import styles from "./loader.module.css"
 
 const Loader: React.FC<{children: React.ReactNode}> = ({children}) => {
 const pathname = usePathname(); //get current path. bind it to a local variable
