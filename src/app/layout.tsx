@@ -6,7 +6,7 @@ import RotatingText from "@/app/components/rotatingFooter/rotatingFooter";
 import ScanlineOverlay from '@/app/components/scanlineOverlay/scanlineOverlay';  // Import the ScanlineOverlay component
 import StoreProvider from "./StoreProvider";
 import PowerButton from "./components/powerButton/powerButton";
-import Loader from "./components/loader/Loader";
+import Loader from "./components/loader/loader";
 
 
 const Terminal = VT323({

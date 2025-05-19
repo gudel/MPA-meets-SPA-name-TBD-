@@ -14,7 +14,7 @@ function* handlePowerSignal(action: PayloadAction<'on'|'off'>) {
     //delay === ms
     //BIOS like sequence orchestration. Imperative atomic logic.
     //Refer to [4/12/2025] entry in debug.log.md for flow sequence.
-    //powerState !== setPower. Do not confuse. powerState lives in action.ts. setPower lives in reducer.
+    //powerState !== setPower. powerState === action.ts. setPower === reducer.
     if (powerState === 'on') { 
         yield put(setPower('on')); // internal state for debugging purposes. 
         yield put(setBootStatus('working')); //second buffer, turns off powerButton mid sequence.
